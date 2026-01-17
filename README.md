@@ -10,7 +10,7 @@
 
 ## ✨ Features
 
-![Alt Text](images/Screenshot_20260117_165531.png)
+![Alt Text](public/Screenshot_20260117_165531.png)
 
 ### 🧠 Dual-Model Intelligence
 We use the right brain for the job:
