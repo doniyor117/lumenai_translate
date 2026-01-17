@@ -11,7 +11,7 @@
 
 ## ✨ Features
 
-![Alt Text](public/lumenai_interface.png)
+![Alt Text](public/lumenai_interface1.png)
 
 ### 🧠 Dual-Model Intelligence
 We use the right brain for the job:
