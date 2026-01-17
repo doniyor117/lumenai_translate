@@ -36,8 +36,8 @@ We use the right brain for the job:
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/yourusername/ai-translator.git
-    cd ai-translator
+    git clone https://github.com/doniyor117/ai_translator.git
+    cd ai_translator
     ```
 
 2.  **Install dependencies**
