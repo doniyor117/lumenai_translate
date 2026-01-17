@@ -1,6 +1,6 @@
 {
-    "name": "AI Translator",
-    "short_name": "Translator",
+    "name": "LumenAI Translate",
+    "short_name": "LumenAI",
     "description": "Smart AI-powered translations with context and multiple meanings",
     "start_url": "/",
     "display": "standalone",

@@ -4,7 +4,7 @@ import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import './globals.css';
 
 export const metadata: Metadata = {
-    title: 'AI Translator | Smart Multi-Meaning Translation',
+    title: 'LumenAI Translate | Smart Multi-Meaning Translation',
     description: 'A powerful AI translator that provides context-aware translations with multiple meanings for vocabulary and accurate translations for sentences.',
     keywords: ['translator', 'AI', 'translation', 'language', 'vocabulary', 'multilingual'],
     manifest: '/manifest.json',

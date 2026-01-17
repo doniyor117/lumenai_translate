@@ -32,7 +32,7 @@ export default function Home() {
                     </div>
                     <div>
                         <h1 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                            AI Translator
+                            LumenAI
                         </h1>
                         <p className="text-xs text-[var(--text-muted)] hidden sm:block">
                             Smart translations with context
