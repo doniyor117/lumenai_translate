@@ -1,6 +1,7 @@
 # 🌐 LumenAI Translate
 
 > **More than just words.** A smart, context-aware translator that understands nuance, slang, and multiple meanings.
+> **Avaible on** https://lumenai-translate.vercel.app/
 
 ![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
@@ -10,7 +11,7 @@
 
 ## ✨ Features
 
-![Alt Text](public/Screenshot_20260117_165531.png)
+![Alt Text](public/lumenai_interface1.png)
 
 ### 🧠 Dual-Model Intelligence
 We use the right brain for the job:
