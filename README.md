@@ -48,8 +48,8 @@ We use the right brain for the job:
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/doniyor117/ai_translator.git
-    cd ai_translator
+    git clone https://github.com/doniyor117/lumenai_translate.git
+    cd lumenai_translate
     ```
 
 2.  **Install dependencies**
