@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { translate, getModelDisplayName } from '@/lib/translate-service';
+import { translate } from '@/lib/translate-service';
+import { getModelDisplayName } from '@/lib/models';
 
-const MAX_CHARS = 5000;
+const MAX_CHARS = 10000;
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { text, sourceLang, targetLang, context } = body;
+        const { text, sourceLang, targetLang, context, mode, model } = body;
 
         // Validation
         if (!text || typeof text !== 'string') {
@@ -30,13 +31,20 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (mode && !['meaning', 'direct', 'reverse'].includes(mode)) {
+            return NextResponse.json(
+                { error: 'Invalid mode. Must be meaning, direct, or reverse' },
+                { status: 400 }
+            );
+        }
+
         // Get API keys
         const groqApiKey = process.env.GROQ_API_KEY;
         const geminiApiKey = process.env.GEMINI_API_KEY;
 
-        if (!groqApiKey) {
+        if (!groqApiKey && !geminiApiKey) {
             return NextResponse.json(
-                { error: 'GROQ_API_KEY not configured in .env.local' },
+                { error: 'No translation API keys (GROQ_API_KEY or GEMINI_API_KEY) are configured in .env.local' },
                 { status: 500 }
             );
         }
@@ -47,9 +55,11 @@ export async function POST(request: NextRequest) {
                 sourceLang: sourceLang || 'auto',
                 targetLang,
                 context,
+                mode,
+                model,
             },
             groqApiKey,
-            geminiApiKey // Optional: used for sentences (5+ words)
+            geminiApiKey
         );
 
         return NextResponse.json({
@@ -59,8 +69,9 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error('Translation error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Translation failed. Please try again.';
         return NextResponse.json(
-            { error: 'Translation failed. Please try again.' },
+            { error: errorMessage },
             { status: 500 }
         );
     }

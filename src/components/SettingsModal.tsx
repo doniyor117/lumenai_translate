@@ -1,0 +1,163 @@
+import React, { useEffect } from 'react';
+import { GOOGLE_MODELS, GROQ_MODELS } from '@/lib/models';
+import { TranslationMode } from '@/lib/types';
+import { ThemeToggle } from './ThemeToggle';
+import { ModelSelect } from './ModelSelect';
+
+interface SettingsModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    meaningModel: string;
+    directModel: string;
+    reverseModel: string;
+    translationMode: TranslationMode;
+    onMeaningModelChange: (val: string) => void;
+    onDirectModelChange: (val: string) => void;
+    onReverseModelChange: (val: string) => void;
+    onModeChange: (mode: TranslationMode) => void;
+}
+
+export function SettingsModal({
+    isOpen,
+    onClose,
+    meaningModel,
+    directModel,
+    reverseModel,
+    translationMode,
+    onMeaningModelChange,
+    onDirectModelChange,
+    onReverseModelChange,
+    onModeChange,
+}: SettingsModalProps) {
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isOpen]);
+
+    if (!isOpen) return null;
+
+    const modelGroups = [
+        { label: 'Google Gemini (High Context)', models: GOOGLE_MODELS },
+        { label: 'Groq (Fast)', models: GROQ_MODELS }
+    ];
+
+    const directModelGroups = [
+        { label: 'Google Gemini (High Quality)', models: GOOGLE_MODELS },
+        { label: 'Groq (Fast)', models: GROQ_MODELS }
+    ];
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in p-4 sm:p-6">
+            <div 
+                className="absolute inset-0 bg-black/20 backdrop-blur-sm" 
+                onClick={onClose}
+                aria-hidden="true"
+            />
+            
+            <div className="relative w-full max-w-md bg-[var(--surface)] border border-[var(--border)] rounded-2xl shadow-xl overflow-hidden animate-scale-in">
+                <div className="flex items-center justify-between p-5 border-b border-[var(--border)]">
+                    <h2 className="text-lg font-semibold text-[var(--foreground)]">Settings</h2>
+                    <button
+                        onClick={onClose}
+                        className="p-2 -mr-2 text-[var(--text-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-hover)] rounded-full transition-colors"
+                        aria-label="Close settings"
+                    >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div className="p-5 space-y-6">
+                    {/* Appearance */}
+                    <div className="space-y-4">
+                        <h3 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider">Appearance</h3>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <label className="text-sm font-medium text-[var(--foreground)]">Theme</label>
+                                <p className="text-xs text-[var(--text-muted)]">Toggle between light and dark mode</p>
+                            </div>
+                            <ThemeToggle />
+                        </div>
+
+                        <div className="pt-4 border-t border-[var(--border)] space-y-3">
+                            <div>
+                                <label className="text-sm font-medium text-[var(--foreground)]">Translation Mode</label>
+                                <p className="text-xs text-[var(--text-muted)]">Select how LumenAI processes your text</p>
+                            </div>
+                            <div className="flex bg-[var(--surface-hover)] rounded-lg p-1 border border-[var(--border)]">
+                                <button
+                                    onClick={() => onModeChange('meaning')}
+                                    className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all ${translationMode === 'meaning' ? 'bg-[var(--surface)] text-[var(--primary)] shadow-sm' : 'text-[var(--text-muted)] hover:text-[var(--foreground)]'}`}
+                                >
+                                    Meaning
+                                </button>
+                                <button
+                                    onClick={() => onModeChange('direct')}
+                                    className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all ${translationMode === 'direct' ? 'bg-[var(--surface)] text-[var(--primary)] shadow-sm' : 'text-[var(--text-muted)] hover:text-[var(--foreground)]'}`}
+                                >
+                                    Direct
+                                </button>
+                                <button
+                                    onClick={() => onModeChange('reverse')}
+                                    className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all ${translationMode === 'reverse' ? 'bg-[var(--surface)] text-[var(--primary)] shadow-sm' : 'text-[var(--text-muted)] hover:text-[var(--foreground)]'}`}
+                                >
+                                    Reverse
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <h3 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider">Model Selection</h3>
+                        
+                        <div className="space-y-1.5 relative z-30">
+                            <label className="text-sm font-medium text-[var(--foreground)] block">Meaning Mode</label>
+                            <p className="text-xs text-[var(--text-muted)] mb-2">Used for deep context, nuances, and multiple definitions.</p>
+                            <ModelSelect 
+                                value={meaningModel} 
+                                onChange={onMeaningModelChange} 
+                                groups={modelGroups} 
+                            />
+                        </div>
+
+                        <div className="space-y-1.5 relative z-20">
+                            <label className="text-sm font-medium text-[var(--foreground)] mt-4 block">Direct Mode</label>
+                            <p className="text-xs text-[var(--text-muted)] mb-2">Used for fast, literal sentence translations.</p>
+                            <ModelSelect 
+                                value={directModel} 
+                                onChange={onDirectModelChange} 
+                                groups={directModelGroups} 
+                            />
+                        </div>
+
+                        <div className="space-y-1.5 relative z-10">
+                            <label className="text-sm font-medium text-[var(--foreground)] mt-4 block">Reverse Lookup Mode</label>
+                            <p className="text-xs text-[var(--text-muted)] mb-2">Used for finding words based on a description.</p>
+                            <ModelSelect 
+                                value={reverseModel} 
+                                onChange={onReverseModelChange} 
+                                groups={modelGroups} 
+                            />
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="p-4 border-t border-[var(--border)] bg-[var(--surface-hover)] text-right">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-medium rounded-lg transition-colors"
+                    >
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}

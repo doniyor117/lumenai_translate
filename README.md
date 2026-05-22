@@ -12,38 +12,42 @@
 
 ## ✨ Features
 
-![Alt Text](public/lumenai_interface1.png)
+![Alt Text](public/lumenai_interface.png)
 
-### 🧠 Dual-Model Intelligence
-We use the right brain for the job:
-*   **For Vocabulary (1-4 words)**: Uses **Llama 3.1 70B (via Groq)** to provide rich, dictionary-style definitions with visual emojis, pronunciation guides, and usage examples.
-*   **For Sentences (5+ words)**: Automatically switches to **Gemini 1.5 Flash** for rapid, fluent, and accurate full-text translation.
+### 🧠 3 Intelligent Translation Modes
+LumenAI doesn't just do 1-to-1 translation. Choose the mode that fits your exact need:
+*   **📚 Meaning (Dictionary) Mode**: Perfect for single words or short phrases. Provides rich dictionary-style definitions, parts of speech, synonyms, pronunciation guides, and visual emojis to help you grasp the true nuance.
+*   **⚡ Direct Mode**: Fast, pure, native-sounding translation. Ideal for sentences, paragraphs, or when you just need the text translated accurately without extra fluff.
+*   **🔍 Reverse Lookup**: Forgot a word? Describe it! Type "a place where you borrow books" and LumenAI will instantly find the target word for you (e.g., "Library") in your chosen language.
+
+### ⚙️ Customizable AI Engines
+Take full control over the AI powering your translations. You can mix and match models for different modes!
+*   **Groq Inference Engine**: Blazing fast models including **Llama 3.3 70B**, **Llama 4 Scout**, and **Qwen 3**.
+*   **Google AI**: Powerful models including **Gemini 3.1 Flash-Lite** and **Gemma 4**.
 
 ### 🎧 Audio & Voice Features
-*   **Speech-to-Text (STT)**: Speak directly into the app using Chrome/Edge's native speech recognition.
+*   **Speech-to-Text (STT)**: Speak directly into the app using native browser speech recognition.
 *   **Smart Text-to-Speech (TTS)**:
-    *   **Native Accent Force**: Automatically detects and forces the *correct* regional voice (e.g., German voice for German text) to fix accent issues.
-    *   **Intelligent Reading**: For vocabulary words, it reads *only* the headword (e.g., "Überraschung") and ignores the grammar metadata.
-    *   **Voice Quality**: Prioritizes high-quality Google/Microsoft neural voices if available.
+    *   **Native Accent Force**: Automatically detects and forces the *correct* regional voice (e.g., French voice for French text) to ensure perfect pronunciation.
+    *   **Intelligent Reading**: In Meaning or Reverse mode, the AI smartly reads *only* the translated words/headwords, skipping the grammar metadata and markdown formatting.
+    *   **Voice Quality**: Prioritizes high-quality Google/Microsoft neural voices if available on your device.
 
 ### 🎯 Precision Logic
-*   **Strict Language Enforcement**: Prevents "false friend" errors. If you select **German** but type "Gift" (which exists in English too), it forces the AI to treat it as German ("Poison") instead of guessing English ("Present").
+*   **Auto-Detect Mastery**: Automatically identifies the input language and adapts its translation rules perfectly.
+*   **Strict Language Enforcement**: Prevents "false friend" errors. If you explicitly select **German** but type "Gift" (which exists in English too), it forces the AI to treat it as German ("Poison") instead of guessing English ("Present").
+*   **🎭 Context Button**: Add optional context notes (e.g., "formal email", "Gen Z slang", "medical document") to get the exact tone you need.
 
 ### 🚀 Key Capabilities
-*   **📚 Smart Dictionary**: Don't just get a word; get the *meaning*. See synonyms, parts of speech, and example sentences.
-*   **🎭 Context-Aware**: Add optional context (e.g., "formal email", "slang", "medical") to get the perfect tone.
-*   **📱 Installable App (PWA)**: Add to your mobile home screen and use it like a native app.
-*   **⚡ Blazing Fast**: Powered by Groq's LPU inference engine for instant vocabulary lookups.
-*   **🎤 Audio Support**: Speech-to-Text inputs and Text-to-Speech output with smart accent detection.
-*   **🎨 Beautiful UI**: Glassmorphism design with full Dark Mode support and smooth animations.
-*   **💾 History**: Automatically saves your translations locally so you never lose them.
+*   **🎨 Beautiful Glassmorphic UI**: Minimalist, elevated UI components with smooth animations and dark mode support that looks gorgeous on any device.
+*   **📱 Installable App (PWA)**: Add to your mobile home screen and use it like a native iOS or Android app.
+*   **💾 Local History**: Automatically saves your translations locally so you never lose your vocabulary lists.
 
 ## 🛠️ Getting Started
 
 ### Prerequisites
 *   Node.js 18+
 *   npm or yarn
-*   API Keys for [Groq](https://console.groq.com/) and [Gemini](https://aistudio.google.com/app/apikey)
+*   API Keys for [Groq](https://console.groq.com/) and/or [Gemini](https://aistudio.google.com/app/apikey)
 
 ### Installation
 
@@ -59,12 +63,12 @@ We use the right brain for the job:
     ```
 
 3.  **Configure Environment**
-    Create a `.env.local` file in the root directory:
+    Create a `.env.local` file in the root directory. You can use one or both:
     ```env
-    # Groq API Key (for rich vocabulary)
+    # Groq API Key
     GROQ_API_KEY=gsk_your_groq_key_here
 
-    # Gemini API Key (for sentences - Free Tier available)
+    # Gemini API Key 
     GEMINI_API_KEY=your_gemini_key_here
     ```
 
@@ -77,7 +81,7 @@ We use the right brain for the job:
 
 ## 📱 How to Install on Mobile
 
-This app is a Progressive Web App (PWA).
+This app is a fully functional Progressive Web App (PWA).
 
 *   **iOS**: Open in Safari → Tap 'Share' → Select 'Add to Home Screen'.
 *   **Android**: Open in Chrome → Tap menu (⋮) → Select 'Install app'.

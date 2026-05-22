@@ -8,9 +8,10 @@ interface LanguageSelectorProps {
     onChange: (code: string) => void;
     excludeAuto?: boolean;
     label: string;
+    align?: 'left' | 'right';
 }
 
-export function LanguageSelector({ value, onChange, excludeAuto, label }: LanguageSelectorProps) {
+export function LanguageSelector({ value, onChange, excludeAuto, label, align = 'left' }: LanguageSelectorProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState('');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -57,16 +58,16 @@ export function LanguageSelector({ value, onChange, excludeAuto, label }: Langua
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-hover)] transition-colors text-left"
             >
-                <span className="flex items-center gap-2">
-                    <span className="font-medium">{selectedLang?.name || 'Select'}</span>
+                <span className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+                    <span className="font-medium truncate">{selectedLang?.name || 'Select'}</span>
                     {selectedLang && selectedLang.code !== 'auto' && (
-                        <span className="text-sm text-[var(--text-muted)]">
+                        <span className="text-xs text-[var(--text-muted)] truncate hidden sm:inline">
                             ({selectedLang.nativeName})
                         </span>
                     )}
                 </span>
                 <svg
-                    className={`w-5 h-5 text-[var(--text-muted)] transition-transform ${isOpen ? 'rotate-180' : ''
+                    className={`w-5 h-5 text-[var(--text-muted)] flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''
                         }`}
                     fill="none"
                     viewBox="0 0 24 24"
@@ -77,7 +78,9 @@ export function LanguageSelector({ value, onChange, excludeAuto, label }: Langua
             </button>
 
             {isOpen && (
-                <div className="absolute z-50 w-full mt-1 bg-[var(--background)] border border-[var(--border)] rounded-lg shadow-xl max-h-72 overflow-hidden">
+                <div className={`absolute z-50 w-[280px] sm:w-full mt-1 bg-[var(--background)] border border-[var(--border)] rounded-lg shadow-xl max-h-72 overflow-hidden ${
+                    align === 'right' ? 'right-0 origin-top-right' : 'left-0 origin-top-left'
+                }`}>
                     <div className="p-2 border-b border-[var(--border)]">
                         <input
                             ref={inputRef}

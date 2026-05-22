@@ -125,10 +125,13 @@ export function HistorySidebar({ isOpen, onClose, onSelect, refreshTrigger }: Hi
                     ) : (
                         <div className="divide-y divide-[var(--border)]">
                             {history.map((entry) => (
-                                <button
+                                <div
                                     key={entry.id}
+                                    role="button"
+                                    tabIndex={0}
                                     onClick={() => onSelect(entry)}
-                                    className="w-full p-4 text-left hover:bg-[var(--surface-hover)] transition-colors group"
+                                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(entry); } }}
+                                    className="w-full p-4 text-left hover:bg-[var(--surface-hover)] transition-colors group cursor-pointer"
                                 >
                                     <div className="flex items-start justify-between gap-2">
                                         <div className="flex-1 min-w-0">
@@ -151,7 +154,7 @@ export function HistorySidebar({ isOpen, onClose, onSelect, refreshTrigger }: Hi
                                             </svg>
                                         </button>
                                     </div>
-                                </button>
+                                </div>
                             ))}
                         </div>
                     )}

@@ -1,0 +1,63 @@
+import { useState, useEffect } from 'react';
+
+export type TranslationMode = 'meaning' | 'direct' | 'reverse';
+
+export function usePreferences() {
+    const [mode, setMode] = useState<TranslationMode>('meaning');
+    const [meaningModel, setMeaningModel] = useState('auto');
+    const [directModel, setDirectModel] = useState('auto');
+    const [reverseModel, setReverseModel] = useState('auto');
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const savedMode = localStorage.getItem('lumen_translation_mode') as TranslationMode;
+            if (savedMode && ['meaning', 'direct', 'reverse'].includes(savedMode)) {
+                setMode(savedMode);
+            }
+            
+            const savedMeaning = localStorage.getItem('lumen_meaning_model');
+            if (savedMeaning) setMeaningModel(savedMeaning);
+            
+            const savedDirect = localStorage.getItem('lumen_direct_model');
+            if (savedDirect) setDirectModel(savedDirect);
+
+            const savedReverse = localStorage.getItem('lumen_reverse_model');
+            if (savedReverse) setReverseModel(savedReverse);
+
+            setIsLoaded(true);
+        }
+    }, []);
+
+    const handleSetMode = (newMode: TranslationMode) => {
+        setMode(newMode);
+        localStorage.setItem('lumen_translation_mode', newMode);
+    };
+
+    const handleSetMeaningModel = (model: string) => {
+        setMeaningModel(model);
+        localStorage.setItem('lumen_meaning_model', model);
+    };
+
+    const handleSetDirectModel = (model: string) => {
+        setDirectModel(model);
+        localStorage.setItem('lumen_direct_model', model);
+    };
+
+    const handleSetReverseModel = (model: string) => {
+        setReverseModel(model);
+        localStorage.setItem('lumen_reverse_model', model);
+    };
+
+    return {
+        isLoaded,
+        mode,
+        setMode: handleSetMode,
+        meaningModel,
+        setMeaningModel: handleSetMeaningModel,
+        directModel,
+        setDirectModel: handleSetDirectModel,
+        reverseModel,
+        setReverseModel: handleSetReverseModel,
+    };
+}
