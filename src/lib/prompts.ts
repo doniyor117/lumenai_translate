@@ -25,9 +25,7 @@ export function buildMeaningPrompt({ text, sourceLang, targetLang, context }: Pr
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS (use markdown for bolding and lists):
 
-**Detected Language:** [Full Language Name] [flag emoji]
-
-**[Corrected Word if typo, or Original Word]** [pronunciation]
+${isAuto ? '**Detected Language:** [Full Language Name] [flag emoji]\n\n' : ''}**[Corrected Word if typo, or Original Word]** [pronunciation]
 
 1. [visual emoji] **[Translation in ${targetName}]** [*part of speech like noun, verb, adj., etc.*]
    [One line explanation in ${targetName} about when/how to use this meaning]
@@ -70,13 +68,11 @@ export function buildDirectPrompt({ text, sourceLang, targetLang, context }: Pro
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 
-**Detected Language:** [Language Name] [flag emoji]
-
-[Your accurate, natural translation in ${targetName}]
+${isAuto ? '**Detected Language:** [Language Name] [flag emoji]\n\n' : ''}[Your accurate, natural translation in ${targetName}]
 
 RULES:
 ${!isAuto ? `- CRITICAL: The user has EXPLICITLY set the source language to ${sourceName}. Treat the input as ${sourceName}, even if it looks like another language.` : `- CRITICAL: Identify the language of the input text accurately and write it in the 'Detected Language' line.`}
-- Provide ONLY the translation after the detected language line
+- Provide ONLY the translation${isAuto ? ' after the detected language line' : ''}
 - Use natural, native-sounding ${targetName}
 - Preserve the original meaning, tone, and style
 - NO explanations, NO alternatives, NO notes
@@ -97,14 +93,13 @@ export function buildReverseLookupPrompt({ text, sourceLang, targetLang, context
     const source = getLanguageByCode(sourceLang);
     const sourceName = source ? source.name : sourceLang;
     const sourceFlag = source ? source.flag : '🌐';
+    const isAuto = sourceLang === 'auto';
 
     const systemInstruction = `You are an expert linguist. The user is trying to remember or find a word based on a description.
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 
-**Detected Language:** ${sourceName} ${sourceFlag}
-
-Here are the best candidates for your description:
+${isAuto ? '**Detected Language:** [Language Name] [flag emoji]\n\n' : ''}Here are the best candidates for your description:
 
 1. **[Candidate Word in ${targetName}]** [*part of speech*]
    [Literal translation or core meaning in ${sourceName}]
