@@ -1,8 +1,14 @@
 import { GOOGLE_MODELS, GROQ_MODELS, getModelProvider } from './models';
-import { buildMeaningPrompt, buildDirectPrompt, buildReverseLookupPrompt } from './prompts';
+import { buildMeaningPrompt, buildDirectPrompt, buildReverseLookupPrompt, PromptResult } from './prompts';
 
 // API endpoints
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+const CONFIGURABLE_REASONING_MODELS = [
+    'qwen/qwen3-32b',
+    'openai/gpt-oss-120b',
+    'openai/gpt-oss-20b'
+];
 
 export type OutputMode = 'meaning' | 'direct' | 'reverse';
 
@@ -36,21 +42,30 @@ class RateLimitError extends Error {
  */
 async function translateWithGroq(
     model: string,
-    prompt: string,
+    prompt: PromptResult,
     apiKey: string
 ): Promise<string> {
+    const body: any = {
+        model,
+        messages: [
+            { role: 'system', content: prompt.systemInstruction },
+            { role: 'user', content: prompt.userPrompt }
+        ],
+        temperature: 0.3,
+        max_tokens: 2000,
+    };
+
+    if (CONFIGURABLE_REASONING_MODELS.includes(model)) {
+        body.reasoning_effort = "none";
+    }
+
     const response = await fetch(GROQ_URL, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            model,
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.3,
-            max_tokens: 2000,
-        }),
+        body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -70,7 +85,7 @@ async function translateWithGroq(
  */
 async function translateWithGemini(
     model: string,
-    prompt: string,
+    prompt: PromptResult,
     apiKey: string
 ): Promise<string> {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
@@ -81,7 +96,10 @@ async function translateWithGemini(
             'x-goog-api-key': apiKey,
         },
         body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
+            systemInstruction: {
+                parts: [{ text: prompt.systemInstruction }]
+            },
+            contents: [{ parts: [{ text: prompt.userPrompt }] }],
             generationConfig: {
                 temperature: 0.3,
                 maxOutputTokens: 2000,
@@ -118,7 +136,7 @@ export async function translate(
         context: request.context,
     };
 
-    let prompt = '';
+    let prompt: PromptResult;
     if (execMode === 'reverse') {
         prompt = buildReverseLookupPrompt(promptParams);
     } else if (execMode === 'direct') {
@@ -131,6 +149,14 @@ export async function translate(
     let modelsToTry: string[] = [];
     const preferredModel = request.model && request.model !== 'auto' ? request.model : null;
 
+    const TOP_5_MODELS = [
+        'gemini-3.1-flash-lite',
+        'openai/gpt-oss-120b',
+        'llama-3.3-70b-versatile',
+        'qwen/qwen3-32b',
+        'gemma-4-31b-it'
+    ];
+
     if (preferredModel) {
         const provider = getModelProvider(preferredModel);
         if (provider === 'google') {
@@ -139,12 +165,8 @@ export async function translate(
             modelsToTry = [preferredModel, ...GROQ_MODELS.map(m => m.id).filter(id => id !== preferredModel)];
         }
     } else {
-        // Auto model selection
-        if (execMode === 'direct') {
-            modelsToTry = [...GOOGLE_MODELS.map(m=>m.id), ...GROQ_MODELS.map(m=>m.id)];
-        } else {
-            modelsToTry = [...GROQ_MODELS.map(m=>m.id), ...GOOGLE_MODELS.map(m=>m.id)];
-        }
+        // Auto model selection uses the unified Top 5 ranking
+        modelsToTry = [...TOP_5_MODELS];
     }
 
     let lastError: Error | null = null;

@@ -7,6 +7,8 @@ export function usePreferences() {
     const [meaningModel, setMeaningModel] = useState('auto');
     const [directModel, setDirectModel] = useState('auto');
     const [reverseModel, setReverseModel] = useState('auto');
+    const [sourceLang, setSourceLang] = useState('auto');
+    const [targetLang, setTargetLang] = useState('uz');
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
@@ -24,6 +26,12 @@ export function usePreferences() {
 
             const savedReverse = localStorage.getItem('lumen_reverse_model');
             if (savedReverse) setReverseModel(savedReverse);
+
+            const savedSource = localStorage.getItem('lumen_source_lang');
+            if (savedSource) setSourceLang(savedSource);
+
+            const savedTarget = localStorage.getItem('lumen_target_lang');
+            if (savedTarget) setTargetLang(savedTarget);
 
             setIsLoaded(true);
         }
@@ -49,6 +57,16 @@ export function usePreferences() {
         localStorage.setItem('lumen_reverse_model', model);
     };
 
+    const handleSetSourceLang = (lang: string) => {
+        setSourceLang(lang);
+        localStorage.setItem('lumen_source_lang', lang);
+    };
+
+    const handleSetTargetLang = (lang: string) => {
+        setTargetLang(lang);
+        localStorage.setItem('lumen_target_lang', lang);
+    };
+
     return {
         isLoaded,
         mode,
@@ -59,5 +77,9 @@ export function usePreferences() {
         setDirectModel: handleSetDirectModel,
         reverseModel,
         setReverseModel: handleSetReverseModel,
+        sourceLang,
+        setSourceLang: handleSetSourceLang,
+        targetLang,
+        setTargetLang: handleSetTargetLang,
     };
 }

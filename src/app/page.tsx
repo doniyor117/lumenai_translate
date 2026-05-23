@@ -84,6 +84,10 @@ export default function Home() {
                         meaningModel={prefs.meaningModel}
                         directModel={prefs.directModel}
                         reverseModel={prefs.reverseModel}
+                        sourceLang={prefs.sourceLang}
+                        targetLang={prefs.targetLang}
+                        onSourceLangChange={prefs.setSourceLang}
+                        onTargetLangChange={prefs.setTargetLang}
                     />
                 )}
             </div>

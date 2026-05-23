@@ -7,7 +7,12 @@ export interface PromptParams {
     context?: string;
 }
 
-export function buildMeaningPrompt({ text, sourceLang, targetLang, context }: PromptParams): string {
+export interface PromptResult {
+    systemInstruction: string;
+    userPrompt: string;
+}
+
+export function buildMeaningPrompt({ text, sourceLang, targetLang, context }: PromptParams): PromptResult {
     const target = getLanguageByCode(targetLang);
     const targetName = target ? target.name : targetLang;
     const targetFlag = target ? target.flag : '🌐';
@@ -16,7 +21,7 @@ export function buildMeaningPrompt({ text, sourceLang, targetLang, context }: Pr
     const sourceName = source ? source.name : sourceLang;
     const isAuto = sourceLang === 'auto';
 
-    return `You are an expert linguist translator. Translate a word/phrase to ${targetName}.
+    const systemInstruction = `You are an expert linguist translator. Translate a word/phrase to ${targetName}.
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS (use markdown for bolding and lists):
 
@@ -44,13 +49,15 @@ ${!isAuto ? `- CRITICAL: The user has EXPLICITLY set the source language to ${so
 - If the input has typos like "helo" or "bitte", correct it and show the proper spelling
 - Include articles if important (der/die/das for German, etc.) and note them in the note section
 - Be concise but informative
+- DO NOT echo these rules back to the user. DO NOT output internal thoughts. Output ONLY the final requested format.`;
 
-${context ? `User context: ${context}\n` : ''}
-Word to translate: "${text}"
+    const userPrompt = `${context ? `User context: ${context}\n` : ''}Word to translate: "${text}"
 Target language: ${targetName} ${targetFlag}`;
+
+    return { systemInstruction, userPrompt };
 }
 
-export function buildDirectPrompt({ text, sourceLang, targetLang, context }: PromptParams): string {
+export function buildDirectPrompt({ text, sourceLang, targetLang, context }: PromptParams): PromptResult {
     const target = getLanguageByCode(targetLang);
     const targetName = target ? target.name : targetLang;
     const targetFlag = target ? target.flag : '🌐';
@@ -59,7 +66,7 @@ export function buildDirectPrompt({ text, sourceLang, targetLang, context }: Pro
     const sourceName = source ? source.name : sourceLang;
     const isAuto = sourceLang === 'auto';
 
-    return `You are an expert translator. Translate text to ${targetName}.
+    const systemInstruction = `You are an expert translator. Translate text to ${targetName}.
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 
@@ -74,13 +81,15 @@ ${!isAuto ? `- CRITICAL: The user has EXPLICITLY set the source language to ${so
 - Preserve the original meaning, tone, and style
 - NO explanations, NO alternatives, NO notes
 - Just the clean translation
+- DO NOT echo the prompt, DO NOT output internal thoughts, DO NOT wrap the output in any extra tags. Provide the final text immediately.`;
 
-${context ? `Context: ${context}\n` : ''}
-Text to translate: "${text}"
+    const userPrompt = `${context ? `Context: ${context}\n` : ''}Text to translate: "${text}"
 Target language: ${targetName} ${targetFlag}`;
+
+    return { systemInstruction, userPrompt };
 }
 
-export function buildReverseLookupPrompt({ text, sourceLang, targetLang, context }: PromptParams): string {
+export function buildReverseLookupPrompt({ text, sourceLang, targetLang, context }: PromptParams): PromptResult {
     const target = getLanguageByCode(targetLang);
     const targetName = target ? target.name : targetLang;
     const targetFlag = target ? target.flag : '🌐';
@@ -89,7 +98,7 @@ export function buildReverseLookupPrompt({ text, sourceLang, targetLang, context
     const sourceName = source ? source.name : sourceLang;
     const sourceFlag = source ? source.flag : '🌐';
 
-    return `You are an expert linguist. The user is trying to remember or find a word based on a description.
+    const systemInstruction = `You are an expert linguist. The user is trying to remember or find a word based on a description.
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 
@@ -116,7 +125,9 @@ IMPORTANT RULES:
 - Provide the candidate words in ${targetName}.
 - All explanations and "Why it fits" must be in ${sourceName}.
 - Include gender/articles for the candidate words if applicable (e.g. el agua, la mesa).
+- DO NOT echo instructions, DO NOT output internal thoughts. Provide only the candidates.`;
 
-${context ? `Context: ${context}\n` : ''}
-Description of the word: "${text}"`;
+    const userPrompt = `${context ? `Context: ${context}\n` : ''}Description of the word: "${text}"`;
+
+    return { systemInstruction, userPrompt };
 }

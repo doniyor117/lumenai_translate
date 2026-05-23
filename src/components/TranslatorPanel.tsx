@@ -17,6 +17,10 @@ interface TranslatorPanelProps {
     meaningModel: string;
     directModel: string;
     reverseModel: string;
+    sourceLang: string;
+    targetLang: string;
+    onSourceLangChange: (lang: string) => void;
+    onTargetLangChange: (lang: string) => void;
 }
 
 export function TranslatorPanel({ 
@@ -26,10 +30,12 @@ export function TranslatorPanel({
     onModeChange,
     meaningModel,
     directModel,
-    reverseModel
+    reverseModel,
+    sourceLang,
+    targetLang,
+    onSourceLangChange,
+    onTargetLangChange
 }: TranslatorPanelProps) {
-    const [sourceLang, setSourceLang] = useState('auto');
-    const [targetLang, setTargetLang] = useState('uz');
     const [context, setContext] = useState('');
     const [showContext, setShowContext] = useState(false);
 
@@ -77,8 +83,8 @@ export function TranslatorPanel({
         if (restoredEntry) {
             setSourceText(restoredEntry.sourceText);
             setTranslatedText(restoredEntry.translatedText);
-            setSourceLang(restoredEntry.sourceLang);
-            setTargetLang(restoredEntry.targetLang);
+            onSourceLangChange(restoredEntry.sourceLang);
+            onTargetLangChange(restoredEntry.targetLang);
             if (restoredEntry.context) {
                 setContext(restoredEntry.context);
                 setShowContext(true);
@@ -90,12 +96,12 @@ export function TranslatorPanel({
 
     const handleSwapLanguages = () => {
         if (sourceLang === 'auto') {
-            setSourceLang(targetLang);
-            setTargetLang('en');
+            onSourceLangChange(targetLang);
+            onTargetLangChange('en');
         } else {
             const temp = sourceLang;
-            setSourceLang(targetLang);
-            setTargetLang(temp);
+            onSourceLangChange(targetLang);
+            onTargetLangChange(temp);
         }
         setSourceText(translatedText.replace(/\*/g, '').replace(/\[.*?\]/g, '').trim());
         setTranslatedText('');
@@ -115,8 +121,8 @@ export function TranslatorPanel({
             <LanguageSelect
                 sourceLang={sourceLang}
                 targetLang={targetLang}
-                setSourceLang={setSourceLang}
-                setTargetLang={setTargetLang}
+                setSourceLang={onSourceLangChange}
+                setTargetLang={onTargetLangChange}
                 handleSwapLanguages={handleSwapLanguages}
             />
 
@@ -141,8 +147,8 @@ export function TranslatorPanel({
                     translatedText={translatedText}
                     error={error}
                     isLoading={isLoading}
-                    modelUsed={getModelDisplayName(translationMode === 'direct' ? directModel : translationMode === 'reverse' ? reverseModel : meaningModel)}
-                    outputMode={translationMode}
+                    modelUsed={modelUsed || getModelDisplayName(translationMode === 'direct' ? directModel : translationMode === 'reverse' ? reverseModel : meaningModel)}
+                    outputMode={outputMode || translationMode}
                     isSpeakingTarget={isSpeakingTarget}
                     handleSpeakTarget={handleSpeakTarget}
                 />
