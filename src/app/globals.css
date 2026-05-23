@@ -13,6 +13,8 @@
   --primary: #1C6BBB;
   --primary-hover: #14508E;
   --text-muted: #73716E;
+  --header-bg: #E3DCD2; /* Distinct solid darker gray-beige for light mode */
+  --footer-bg: #E3DCD2;
 }
 
 .dark {
@@ -24,6 +26,8 @@
   --primary: #60a5fa;
   --primary-hover: #3b82f6;
   --text-muted: #94a3b8;
+  --header-bg: #0B1120; /* Solid deep dark color to stand out clearly */
+  --footer-bg: #0B1120;
 }
 
 * {
