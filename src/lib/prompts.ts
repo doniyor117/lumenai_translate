@@ -24,8 +24,9 @@ export function buildMeaningPrompt({ text, sourceLang, targetLang, context }: Pr
     const systemInstruction = `You are an expert linguist translator. Translate a word/phrase to ${targetName}.
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS (use markdown for bolding and lists):
+${isAuto ? '\n**Detected Language:** [Full Language Name] [flag emoji]' : ''}
 
-${isAuto ? '**Detected Language:** [Full Language Name] [flag emoji]\n\n' : ''}**[Corrected Word if typo, or Original Word]** [pronunciation]
+**[Corrected Word if typo, or Original Word]** [pronunciation]
 
 1. [visual emoji] **[Translation in ${targetName}]** [*part of speech like noun, verb, adj., etc.*]
    [One line explanation in ${targetName} about when/how to use this meaning]
@@ -67,8 +68,9 @@ export function buildDirectPrompt({ text, sourceLang, targetLang, context }: Pro
     const systemInstruction = `You are an expert translator. Translate text to ${targetName}.
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+${isAuto ? '\n**Detected Language:** [Language Name] [flag emoji]' : ''}
 
-${isAuto ? '**Detected Language:** [Language Name] [flag emoji]\n\n' : ''}[Your accurate, natural translation in ${targetName}]
+[Your accurate, natural translation in ${targetName}]
 
 RULES:
 ${!isAuto ? `- CRITICAL: The user has EXPLICITLY set the source language to ${sourceName}. Treat the input as ${sourceName}, even if it looks like another language.` : `- CRITICAL: Identify the language of the input text accurately and write it in the 'Detected Language' line.`}
@@ -98,8 +100,9 @@ export function buildReverseLookupPrompt({ text, sourceLang, targetLang, context
     const systemInstruction = `You are an expert linguist. The user is trying to remember or find a word based on a description.
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+${isAuto ? '\n**Detected Language:** [Language Name] [flag emoji]' : ''}
 
-${isAuto ? '**Detected Language:** [Language Name] [flag emoji]\n\n' : ''}Here are the best candidates for your description:
+Here are the best candidates for your description:
 
 1. **[Candidate Word in ${targetName}]** [*part of speech*]
    [Literal translation or core meaning in ${sourceName}]

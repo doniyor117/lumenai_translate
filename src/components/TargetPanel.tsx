@@ -58,43 +58,40 @@ export function TargetPanel({
                         <div className="h-4 bg-[var(--border)] rounded w-5/6" />
                     </div>
                 ) : translatedText ? (
-                    <div className="markdown-body">
+                    <div className="markdown-body relative">
+                        <div className="float-right ml-3 mb-2 relative z-10">
+                            <button
+                                onClick={handleCopy}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-full transition-all border shadow-sm bg-[var(--background)]/85 backdrop-blur-sm ${
+                                    copied
+                                        ? 'text-green-600 border-green-500/20 font-medium'
+                                        : 'text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--surface-hover)]'
+                                }`}
+                                title="Copy"
+                            >
+                                {copied ? (
+                                    <>
+                                        <svg className="w-3.5 h-3.5 text-green-600 animate-scale-in" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span>Copied!</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>Copy</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {translatedText}
                         </ReactMarkdown>
                     </div>
                 ) : (
                     <p className="text-[var(--text-muted)] italic">Translation will appear here...</p>
-                )}
-
-                {translatedText && (
-                    <div className="absolute top-3 right-3">
-                        <button
-                            onClick={handleCopy}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-full transition-all border shadow-sm bg-[var(--background)]/85 backdrop-blur-sm ${
-                                copied
-                                    ? 'text-green-600 border-green-500/20 font-medium'
-                                    : 'text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--surface-hover)]'
-                            }`}
-                            title="Copy"
-                        >
-                            {copied ? (
-                                <>
-                                    <svg className="w-3.5 h-3.5 text-green-600 animate-scale-in" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <span>Copied!</span>
-                                </>
-                            ) : (
-                                <>
-                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                    </svg>
-                                    <span>Copy</span>
-                                </>
-                            )}
-                        </button>
-                    </div>
                 )}
             </div>
 
