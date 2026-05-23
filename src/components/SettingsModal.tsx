@@ -60,8 +60,8 @@ export function SettingsModal({
                 aria-hidden="true"
             />
             
-            <div className="relative w-full max-w-md bg-[var(--surface)] border border-[var(--border)] rounded-2xl shadow-xl overflow-hidden animate-scale-in">
-                <div className="flex items-center justify-between p-5 border-b border-[var(--border)]">
+            <div className="relative w-full max-w-md max-h-[90vh] flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-2xl shadow-xl overflow-hidden animate-scale-in">
+                <div className="flex-none flex items-center justify-between p-5 border-b border-[var(--border)]">
                     <h2 className="text-lg font-semibold text-[var(--foreground)]">Settings</h2>
                     <button
                         onClick={onClose}
@@ -74,7 +74,7 @@ export function SettingsModal({
                     </button>
                 </div>
 
-                <div className="p-5 space-y-6">
+                <div className="flex-1 overflow-y-auto p-5 space-y-6">
                     {/* Appearance */}
                     <div className="space-y-4">
                         <h3 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider">Appearance</h3>

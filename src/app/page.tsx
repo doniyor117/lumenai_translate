@@ -113,8 +113,8 @@ export default function Home() {
                 onModeChange={prefs.setMode}
             />
 
-            <footer className="px-4 py-4 border-t border-[var(--border)] text-center text-xs text-[var(--text-muted)] tracking-wide">
-                <p>
+            <footer className="px-4 py-4 text-center text-xs text-[var(--text-muted)] tracking-wide bg-gradient-to-t from-[var(--background)] to-transparent pointer-events-none">
+                <p className="pointer-events-auto">
                     LumenAI is AI and can make mistakes.
                 </p>
             </footer>
